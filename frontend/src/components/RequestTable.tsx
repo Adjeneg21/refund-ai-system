@@ -25,7 +25,7 @@ export function RequestTable({ rows, onResolve }: Props) {
     id: string,
     action: "approve" | "deny"
   ) {
-    e.stopPropagation(); // don't also toggle the row's expanded state
+    e.stopPropagation(); 
     setResolvingId(id);
     try {
       await onResolve(id, action);

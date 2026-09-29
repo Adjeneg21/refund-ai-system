@@ -31,9 +31,6 @@ export function AdminDashboard() {
       .then((res) => setRows(res.requests))
       .catch((err) => {
         if (err instanceof ApiError && err.status === 401) {
-          // Token was valid before but the server rejected it now (e.g.
-          // ADMIN_TOKEN changed) — drop it and send the user back to the
-          // sign-in screen rather than showing a silently empty dashboard.
           sessionStorage.removeItem(TOKEN_STORAGE_KEY);
           setToken(null);
           setAuthError("Session expired — please sign in again.");
@@ -108,14 +105,12 @@ export function AdminDashboard() {
     );
   }
 
-  // Paging: 7 requests per page. Counts below still cover ALL requests.
+
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const firstIndex = (currentPage - 1) * PAGE_SIZE;
   const pageRows = rows.slice(firstIndex, firstIndex + PAGE_SIZE);
 
-  // Counted by effective status (system decision + any admin override), so
-  // the totals always match what the table and the customer see.
   const counts = rows.reduce(
     (acc, r) => {
       acc[r.status] += 1;

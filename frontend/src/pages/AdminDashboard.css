@@ -115,7 +115,7 @@
     font-size: var(--text-xl);
   }
 
-  /* four counts in a 2x2 grid instead of one row */
+
   .admin-page__summary {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -127,7 +127,7 @@
   }
 
   .admin-gate__field input {
-    font-size: var(--text-base); /* 16px stops iPhones zooming on focus */
+    font-size: var(--text-base); 
     min-height: 44px;
   }
 }

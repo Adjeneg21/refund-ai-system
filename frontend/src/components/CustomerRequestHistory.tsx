@@ -27,9 +27,6 @@ export function CustomerRequestHistory({ requests, loading }: Props) {
   return (
     <div className="request-thread">
       {requests.map((entry) => {
-        // A request updated after it was first created means an admin
-        // resolved it later — show both timestamps so it's clear the
-        // status reflects a human decision made after submission.
         const wasUpdatedLater =
           entry.resolvedAt && entry.resolvedAt !== entry.createdAt;
 

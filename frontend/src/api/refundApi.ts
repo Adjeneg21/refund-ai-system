@@ -17,9 +17,6 @@ class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  // `...init` must come FIRST. If it comes after `headers`, any call that
-  // passes its own headers (like the admin token) replaces this whole object
-  // and silently drops Content-Type, so the backend cannot read the JSON body.
   const res = await fetch(`${API_BASE}${path}`, {
     ...init,
     headers: { "Content-Type": "application/json", ...init?.headers },
@@ -61,7 +58,6 @@ export function submitRefundRequest(input: {
   });
 }
 
-// --- Admin endpoints: require the shared admin token as a header ---
 
 export function fetchAdminRequests(
   adminToken: string

@@ -31,7 +31,6 @@ export function RequestForm({ onSubmit, submitting, onCustomerChange }: Props) {
       setOrders(res.orders);
       setOrderId(res.orders[0]?.id ?? "");
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customerId]);
 
   const selectedOrder = orders.find((o) => o.id === orderId);

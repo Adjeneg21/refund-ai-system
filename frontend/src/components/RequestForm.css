@@ -82,7 +82,7 @@
     padding: var(--space-4);
   }
 
-  /* 16px inputs stop iPhones zooming in on focus; 44px is a comfortable tap target */
+ 
   .request-form select,
   .request-form textarea {
     font-size: var(--text-base);

@@ -133,9 +133,6 @@
   color: var(--line-strong);
 }
 
-/* The table keeps its normal row/column shape at every width. On a phone
-   it's too wide to fit, so this wrapper scrolls horizontally on its own —
-   the rest of the page never moves sideways. */
 .request-table__scroll {
   position: relative;
   overflow-x: auto;
@@ -155,17 +152,6 @@
     display: block;
   }
 
-  /* A soft fade on the right edge, hinting there is more to scroll to.
-     Absolutely positioned against the scroll box (which has position:
-     relative), sized with top/bottom insets rather than height: 100%.
-     A sticky + height:100% + margin-top:-100% version was tried first,
-     but that creates a circular height dependency inside an auto-height
-     overflow-x:auto container: the box's height depends on its content,
-     and that content's height depends on the box's (not-yet-known)
-     height. Browsers resolve the loop by collapsing the whole container
-     to its border box. Absolute positioning sidesteps this entirely,
-     since it is sized against the container's box, not the other way
-     around, so it never participates in that height calculation. */
   .request-table__scroll::after {
     content: "";
     position: absolute;
@@ -178,12 +164,10 @@
   }
 
   .request-table {
-    min-width: 640px; /* keeps every column legible; triggers the scroll */
+    min-width: 640px; 
   }
 
   .request-table__detail-row td {
-    /* the reasoning text wraps to a sensible width instead of stretching
-       to match the (now wider) table */
     white-space: normal;
   }
 

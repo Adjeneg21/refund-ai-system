@@ -38,10 +38,6 @@ export function CustomerChat() {
     setError(null);
     try {
       await submitRefundRequest(input);
-      // Re-fetch rather than append locally: the request is already
-      // persisted server-side by the time this resolves, so this pulls
-      // the same real record the admin dashboard and any later visit to
-      // this page will see — one source of truth, not two.
       loadHistory(input.customerId);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
@@ -83,7 +79,7 @@ export function CustomerChat() {
           </div>
           <p className="customer-page__subtitle">
             Status updates here if our support team reviews an escalated
-            request after you submit it — check back or refresh any time.
+            request after you submit it kinfly check back or refresh any time.
           </p>
           <CustomerRequestHistory requests={requests} loading={loadingHistory} />
         </section>
