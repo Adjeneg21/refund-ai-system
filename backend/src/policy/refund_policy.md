@@ -89,3 +89,13 @@ days** is flagged for human review regardless of the merits of the
 current request. This does not deny the request outright — a customer
 may have a genuine run of bad luck — but the volume itself is grounds
 for a human to take a closer look before another automatic approval.
+
+## 10. Order Status
+Refund rules only apply to orders the order record shows as
+**delivered**. A **cancelled** order (no completed purchase) or one
+already marked **refunded** is **denied**. Any other status —
+processing, shipped, returned, or an unrecognised value — is
+**escalated** for human review, because the return window and item
+condition can't be judged for an order that hasn't been delivered (or
+is mid-return). This check runs after the one-refund-per-order check
+and before the high-value and window checks.

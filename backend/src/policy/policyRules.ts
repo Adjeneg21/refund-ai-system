@@ -86,6 +86,32 @@ export function evaluatePolicy(
     return { decision: "denied", reasons };
   }
 
+  // Section 10: Order status. Only delivered orders go through the normal
+  // return rules. Checked right after the duplicate check because it is a
+  // hard fact about the order record, and it makes the later window/value
+  // checks meaningless for orders that were never fulfilled.
+  const status = order.status.trim().toLowerCase();
+  if (status === "cancelled") {
+    reasons.push(
+      `Order was cancelled (Policy §10) — there is no completed purchase to refund.`
+    );
+    return { decision: "denied", reasons };
+  }
+  if (status === "refunded") {
+    reasons.push(
+      `Order record already shows status "refunded" (Policy §10) — nothing further to refund.`
+    );
+    return { decision: "denied", reasons };
+  }
+  if (status !== "delivered") {
+    // processing / shipped / returned / anything unrecognised: we cannot
+    // judge the return window or item condition, so fail safe to a human.
+    reasons.push(
+      `Order status is "${order.status}", not "delivered" (Policy §10) — cannot be assessed against the return rules, escalating for review.`
+    );
+    return { decision: "escalated", reasons };
+  }
+
   // Section 4: High-value orders always require human review.
   if (order.price > POLICY.HIGH_VALUE_THRESHOLD) {
     reasons.push(

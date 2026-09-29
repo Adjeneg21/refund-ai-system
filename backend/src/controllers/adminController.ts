@@ -8,8 +8,31 @@ import {
 import { findCustomerById, findOrderById } from "../services/orderService.js";
 import { effectiveStatus } from "../models/RefundRequest.js";
 
+const DEFAULT_LIST_LIMIT = 50;
+const MAX_LIST_LIMIT = 200;
+
+/**
+ * Parses ?limit=. Absent -> default. Anything that isn't a positive whole
+ * number (including repeated params, which Express turns into an array) is
+ * rejected rather than silently becoming NaN in the SQL LIMIT clause.
+ * Oversized values are clamped.
+ */
+function parseLimit(raw: unknown): number | null {
+  if (raw === undefined) return DEFAULT_LIST_LIMIT;
+  if (typeof raw !== "string" || !/^\d+$/.test(raw)) return null;
+  const n = Number(raw);
+  if (n < 1) return null;
+  return Math.min(n, MAX_LIST_LIMIT);
+}
+
 export function handleListRequests(req: Request, res: Response): void {
-  const limit = Number(req.query.limit ?? 50);
+  const limit = parseLimit(req.query.limit);
+  if (limit === null) {
+    res
+      .status(400)
+      .json({ error: `limit must be a whole number between 1 and ${MAX_LIST_LIMIT}.` });
+    return;
+  }
   const requests = listRecentRequests(limit);
 
   const enriched = requests.map((r) => {

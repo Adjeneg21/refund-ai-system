@@ -14,7 +14,8 @@ services:
       - LLM_API_KEY=${LLM_API_KEY}
       - LLM_BASE_URL=${LLM_BASE_URL:-}
       - LLM_MODEL=${LLM_MODEL:-llama-3.3-70b-versatile}
-      - ADMIN_TOKEN=${ADMIN_TOKEN:-demo-admin}
+      - ADMIN_TOKEN=${ADMIN_TOKEN:?Set ADMIN_TOKEN in your .env file}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
       - RATE_LIMIT_PER_MIN=${RATE_LIMIT_PER_MIN:-20}
     volumes:
       - ./backend:/app
@@ -36,21 +37,4 @@ services:
       - backend
     command: npm run dev -- --host
 
-# NOTE: Using SQLite (file-based) by default so the whole stack runs with
-# zero extra infra. To switch to Postgres, uncomment the service below,
-# set DATABASE_URL accordingly, and update backend/src/db/client.ts.
-#
-#  db:
-#    image: postgres:16-alpine
-#    container_name: refund-db
-#    environment:
-#      - POSTGRES_USER=refund
-#      - POSTGRES_PASSWORD=refund
-#      - POSTGRES_DB=refund
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data
-#
-# volumes:
-#   pgdata:
+# 

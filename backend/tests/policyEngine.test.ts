@@ -124,3 +124,56 @@ describe("evaluatePolicy", () => {
     expect(result.decision).toBe("approved");
   });
 });
+
+describe("evaluatePolicy — order status (§10)", () => {
+  it("denies cancelled orders", () => {
+    const result = evaluate(makeOrder({ status: "cancelled" }), "Changed my mind");
+    expect(result.decision).toBe("denied");
+    expect(result.reasons[0]).toMatch(/cancelled/i);
+  });
+
+  it("denies orders already marked refunded", () => {
+    const result = evaluate(makeOrder({ status: "refunded" }), "Changed my mind");
+    expect(result.decision).toBe("denied");
+  });
+
+  it.each(["processing", "shipped", "returned"])(
+    "escalates orders with status %s",
+    (status) => {
+      const result = evaluate(makeOrder({ status }), "Changed my mind");
+      expect(result.decision).toBe("escalated");
+      expect(result.reasons[0]).toMatch(/not "delivered"/i);
+    }
+  );
+
+  it("escalates unrecognised statuses instead of approving them", () => {
+    const result = evaluate(makeOrder({ status: "lost_in_transit" }), "Changed my mind");
+    expect(result.decision).toBe("escalated");
+  });
+
+  it("treats status case- and whitespace-insensitively", () => {
+    const result = evaluate(makeOrder({ status: " Delivered " }), "Changed my mind");
+    expect(result.decision).toBe("approved");
+  });
+
+  it("checks status before the high-value rule", () => {
+    const result = evaluate(makeOrder({ status: "cancelled", price: 900 }), "Refund please");
+    expect(result.decision).toBe("denied");
+  });
+
+  it("does not let a defect condition bypass a cancelled order", () => {
+    const result = evaluate(
+      makeOrder({ status: "cancelled", condition: "damaged" }),
+      "Arrived damaged"
+    );
+    expect(result.decision).toBe("denied");
+  });
+
+  it("still checks one-refund-per-order before status", () => {
+    const result = evaluate(makeOrder({ status: "processing" }), "Again", {
+      alreadyRefundedThisOrder: true,
+    });
+    expect(result.decision).toBe("denied");
+    expect(result.reasons[0]).toMatch(/already been approved/i);
+  });
+});

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import rateLimit from "express-rate-limit";
 import { handleRefundRequest } from "../controllers/refundController.js";
+import { asyncHandler } from "../middleware/errorHandler.js";
 
 export const refundRouter = Router();
 
@@ -14,4 +15,4 @@ const submissionLimiter = rateLimit({
   message: { error: "Too many refund requests from this client — please slow down." },
 });
 
-refundRouter.post("/", submissionLimiter, handleRefundRequest);
+refundRouter.post("/", submissionLimiter, asyncHandler(handleRefundRequest));

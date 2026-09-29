@@ -2,11 +2,7 @@ export type RefundDecision = "approved" | "denied" | "escalated";
 export type ResolvedDecision = "approved" | "denied";
 export type EffectiveStatus = "approved" | "pending" | "rejected";
 
-/**
- * Collapses the system's original decision and any later admin override
- * into the three states the UI actually shows. Mirrors the backend's
- * models/RefundRequest.ts effectiveStatus() exactly — keep them in sync.
- */
+
 export function effectiveStatus(
   decision: RefundDecision,
   resolvedDecision?: ResolvedDecision | null

@@ -1,6 +1,4 @@
 :root {
-  /* Color — a register/ledger palette. Status colors are semantic only,
-     never used decoratively outside the DecisionTag component. */
   --paper: #f2f1ea;
   --surface: #ffffff;
   --ink: #1e2420;
@@ -11,9 +9,9 @@
   --pine: #2f4b3c;
   --pine-dark: #22362b;
 
-  --moss: #3f6b4f; /* approved */
-  --amber: #a9660d; /* escalated */
-  --rust: #8b3a2b; /* denied */
+  --moss: #3f6b4f; 
+  --amber: #a9660d; 
+  --rust: #8b3a2b; 
 
   /* Type */
   --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
