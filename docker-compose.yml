@@ -38,21 +38,3 @@ services:
       - backend
     command: npm run dev -- --host
 
-# NOTE: Using SQLite (file-based) by default so the whole stack runs with
-# zero extra infra. To switch to Postgres, uncomment the service below,
-# set DATABASE_URL accordingly, and update backend/src/db/client.ts.
-#
-#  db:
-#    image: postgres:16-alpine
-#    container_name: refund-db
-#    environment:
-#      - POSTGRES_USER=refund
-#      - POSTGRES_PASSWORD=refund
-#      - POSTGRES_DB=refund
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - pgdata:/var/lib/postgresql/data
-#
-# volumes:
-#   pgdata:

@@ -1,30 +1,6 @@
 import OpenAI from "openai";
 import type { Order, PolicyResult } from "../policy/policyRules.js";
 
-/**
- * IMPORTANT — the AI's role is strictly advisory (Policy §9).
- *
- * The decision (approved / denied / escalated) is already final by the
- * time either function below runs — it comes from the deterministic
- * policyEngine. Neither AI call can change it; their outputs only ever
- * populate `adminNote` / `manipulationSuspected` (internal-only) or
- * `customerMessage` (customer-facing wording of an already-fixed decision).
- *
- * Two separate calls, by design:
- *   1. assessClaim() reads the customer's free text — it needs to, in
- *      order to classify/summarize it for the admin log.
- *   2. draftCustomerReply() does NOT receive the customer's free text at
- *      all. Its prompt is built purely from server-controlled data (the
- *      product name, price, and the policy engine's own decision/reasons).
- *      This means a prompt-injection payload in the customer's text has no
- *      channel into the message that actually gets shown back to the
- *      customer, even indirectly — there's nothing for it to ride on.
- *
- * Both calls use OpenAI-style tool/function calling with a fixed schema
- * rather than asking the model to freehand JSON. Output that doesn't match
- * the schema is rejected by the SDK/API itself before it ever reaches our
- * code, which is a stronger guarantee than parsing free-text JSON.
- */
 
 interface ClaimAssessment {
   adminNote: string;
@@ -84,12 +60,6 @@ const REPLY_TOOL = {
   },
 };
 
-/**
- * Used INSTEAD of assessClaim() when the deterministic injection guard has
- * already flagged the request: the flagged text is never sent to the LLM at
- * all, so there is nothing for the payload to act on. The result is a fixed,
- * server-written admin note.
- */
 export function flaggedAssessment(matchedPatterns: string[]): ClaimAssessment {
   return {
     adminNote: `Blocked by security screening (${matchedPatterns.join(", ")}) — the customer's text was not sent to the AI.`,
@@ -163,11 +133,7 @@ Call submit_claim_assessment with your assessment.`;
   return callTool(prompt, ASSESS_TOOL, fallbackAssessment);
 }
 
-/**
- * Call #2 — deliberately does NOT receive claimedReason at all. Built only
- * from server-controlled fields, so there is no customer text for an
- * injection attempt to exploit here, even if call #1 were somehow tricked.
- */
+
 export async function draftCustomerReply(
   order: Order,
   policy: PolicyResult
