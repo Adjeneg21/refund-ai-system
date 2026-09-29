@@ -60,19 +60,10 @@ export function handleListRequests(req: Request, res: Response): void {
   res.status(200).json({ requests: enriched });
 }
 
-/**
- * An admin can resolve ANY request, at any time, more than once — this is
- * a deliberate design choice: the admin is the final human authority and
- * can override a system decision or correct an earlier override. There is
- * no restriction to "escalated only" and no "already resolved" lock.
- */
 export function handleResolveRequest(req: Request, res: Response): void {
   const { id } = req.params;
   const { action } = req.body as { action?: string };
 
-  // "reject" is accepted as an alias for "deny": the UI says Approve/Reject,
-  // while the stored value stays "denied". Accepting both keeps the API
-  // tolerant of either spelling.
   const normalized = action === "reject" ? "deny" : action;
   if (normalized !== "approve" && normalized !== "deny") {
     res
@@ -87,9 +78,7 @@ export function handleResolveRequest(req: Request, res: Response): void {
     return;
   }
 
-  // "resolvedBy" is self-reported (whoever holds the admin token) — this is
-  // a known limitation without real per-user authentication, called out in
-  // the README rather than hidden.
+
   const resolvedBy = req.header("x-admin-name") || "support-agent";
   const resolution = normalized === "approve" ? "approved" : "denied";
 
@@ -105,7 +94,6 @@ export function handleResolveRequest(req: Request, res: Response): void {
   });
 }
 
-/** Permanently clears all saved requests. Admin-token protected via the router. */
 export function handleClearRequests(_req: Request, res: Response): void {
   const deleted = deleteAllRequests();
   res.status(200).json({ deleted });

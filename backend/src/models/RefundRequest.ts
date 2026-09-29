@@ -52,12 +52,7 @@ export function rowToRefundRequest(row: RefundRequestRow): RefundRequestRecord {
   };
 }
 
-/**
- * The three-way status an admin or customer actually sees, collapsing the
- * system's original `decision` and any later human override into one
- * value: an admin's resolution always wins once it exists; otherwise an
- * `escalated` request reads as "pending" (nothing has been decided yet).
- */
+
 export type EffectiveStatus = "approved" | "pending" | "rejected";
 
 export function effectiveStatus(

@@ -9,7 +9,6 @@ import { requireAdminToken } from "../security/adminAuth.js";
 
 export const adminRouter = Router();
 
-// General ceiling on admin traffic per client IP.
 const adminLimiter = rateLimit({
   windowMs: 60 * 1000,
   limit: 120,
@@ -18,9 +17,6 @@ const adminLimiter = rateLimit({
   message: { error: "Too many admin requests. Please slow down." },
 });
 
-// Brute-force protection: only 401 responses count against this budget, so
-// normal use (including legitimate 4xx like a bad action) never locks anyone
-// out, but guessing the token does.
 const authFailureLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 10,

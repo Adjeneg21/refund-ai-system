@@ -32,10 +32,6 @@ export function listOrdersForCustomer(customerId: string): Order[] {
   return rows.map(rowToOrder);
 }
 
-/**
- * Confirms the order actually belongs to the customer making the request —
- * a basic but important integrity check before any policy logic runs.
- */
 export function orderBelongsToCustomer(
   orderId: string,
   customerId: string

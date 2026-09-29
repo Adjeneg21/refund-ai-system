@@ -8,6 +8,12 @@ below) — a few scenarios depend on earlier ones not having already run
 (the one-refund-per-order and refund-frequency tests submit more than once
 on purpose).
 
+Seed order dates are stored as "days ago" and resolved when the database is
+first created, so every scenario below gives the same result no matter what day
+you run it (a fixed date would age out of the 30-day window and change the
+outcomes). If your database was created before this change, reset it once — see
+"Resetting the data" below.
+
 Every decision and reason string below was captured from a live run against
 this exact seed data, not written from memory — if a run gives a different
 result, something about the environment or seed has changed.
@@ -61,7 +67,17 @@ Submit "Changed my mind" for each, in order:
 
 | # | Action | Result |
 |---|---|---|
-| 15 | Submit Elena Petrova / Designer Handbag ($890), then open `/admin`, sign in with the token from `ADMIN_TOKEN`, and click **Approve** on that row | Row's system decision stays **Escalated**, with **"Approved by [name]"** shown once resolved. High-value orders always escalate (§4) regardless of the claim; the admin closes the loop manually — this is the human-review step the policy doc promises. Clicking Approve/Deny a second time on the same row correctly returns an error instead of silently overwriting the first decision |
+| 15 | Submit Elena Petrova / Designer Handbag ($890), then open `/admin`, sign in with the admin token (from `ADMIN_TOKEN`, or the generated token printed in the backend logs), and click **Approve** on that row | Row's system decision stays **Escalated**, and the row shows who last set it. High-value orders always escalate (§4) regardless of the claim; the admin closes the loop manually — this is the human-review step the policy doc promises. |
+| 16 | On the same row, click **Reject** | Status changes to Rejected and "last set by" updates. This is deliberate: an admin is the final human authority and can correct an earlier override. Only the latest resolution is kept, but the original system decision is never overwritten in the audit trail |
+| 17 | Submit two requests for the **same order at the same moment** (e.g. two browser tabs) | Exactly one is **Approved**, the other **Denied** under §6. Submissions are serialised per customer, so the one-refund-per-order and refund-frequency rules can't be raced |
+
+## Order status (§10)
+
+The seed data only contains delivered orders, so the order-status rules are
+covered by unit tests instead (`cd backend && npm test`): cancelled or refunded
+orders are **denied**, and processing, shipped, returned or unrecognised
+statuses are **escalated**. To see one in the UI, change an order's `status` in
+`backend/src/db/seed/orders.json` and reset the data.
 
 ## Resetting the data between scenarios
 

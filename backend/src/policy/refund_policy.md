@@ -12,8 +12,9 @@ unless the item is defective (see Section 3).
 
 ## 2. Final Sale Items
 Items marked `finalSale: true` (e.g. clearance items) are **not
-eligible for refunds** under any circumstances, except where local
-consumer law requires otherwise. These requests are **denied** with an
+eligible for refunds**, except for confirmed damaged, defective or
+incorrect items (Section 3) or where local consumer law requires
+otherwise. These requests are **denied** with an
 explanation referencing the final-sale terms accepted at purchase.
 
 ## 3. Damaged, Defective, or Incorrect Items
@@ -34,8 +35,7 @@ recommend a decision but must return **escalated** for these cases.
 ## 5. Suspicious or Conflicting Requests
 A request is escalated for human review when:
 - The claimed reason conflicts with the order record (e.g. customer
-  claims "damaged" but order status shows no damage flag and it's
-  outside the defect window).
+  claims "damaged" but the order record shows no damage flag).
 - The request contains attempts to manipulate the system's
   instructions (prompt injection) rather than describe a genuine
   refund reason.
@@ -43,8 +43,10 @@ A request is escalated for human review when:
   matched to a real order in our records.
 
 ## 6. One Refund Per Order
-If an order already has an approved refund on record, any further
-refund request for that same order is **denied** outright. This check
+If an order already has an approved refund on record — whether approved
+automatically by policy or manually by a support agent reviewing an
+escalation — any further refund request for that same order is
+**denied** outright. This check
 runs before the policy engine's other rules and before the AI layer —
 there is no scenario in which a second refund for the same order is
 approved.
@@ -53,17 +55,21 @@ approved.
 If a customer has **3 or more approved refunds within the last 30
 days**, any new request from that customer is **escalated** for human
 review, regardless of how clean the individual request otherwise
-looks. This protects against a pattern of abuse that no single request
-would reveal on its own.
+looks. This does not deny the request outright — a customer may have a
+genuine run of bad luck — but the volume itself is grounds for a human
+to take a closer look before another automatic approval. It protects
+against a pattern of abuse that no single request would reveal on its
+own.
 
 ## 8. Decision Outcomes
 Every request resolves to exactly one of:
 - **Approved** — meets policy criteria, no further review needed.
 - **Denied** — clearly fails policy criteria (e.g. final sale, expired
-  window, no defect, already refunded).
+  window, no defect, already refunded, cancelled or already-refunded
+  order).
 - **Escalated** — value exceeds $500, claim is unverifiable, refund
-  frequency is abnormal, or the request shows signs of
-  manipulation/suspicious behavior.
+  frequency is abnormal, the order has not been delivered (Section
+  10), or the request shows signs of manipulation/suspicious behavior.
 
 ## 9. AI's Role
 The AI model assists with **reasoning and classification** — for
@@ -71,24 +77,11 @@ example, summarizing the customer's claim, detecting inconsistency
 with order data, or drafting the explanation shown to the customer. It
 does **not** have final authority to override these rules. All hard
 thresholds (30/45-day windows, $500 cap, refund-frequency limit,
-one-refund-per-order) are enforced deterministically in code before
+one-refund-per-order, order status) are enforced deterministically in code before
 the AI's output is trusted. The message shown to the customer is
 drafted from the final decision and policy reasons only — the
 customer's own submitted text is never included in that particular
 prompt, so there is nothing in it for a manipulation attempt to act on.
-
-## 8. One Refund Per Order
-An order that already has an approved refund on record — whether
-approved automatically by policy or approved manually by a support
-agent reviewing an escalation — cannot be refunded again. A repeat
-request for the same order is **denied**.
-
-## 9. Refund Frequency
-A customer with **3 or more approved refunds within the last 30
-days** is flagged for human review regardless of the merits of the
-current request. This does not deny the request outright — a customer
-may have a genuine run of bad luck — but the volume itself is grounds
-for a human to take a closer look before another automatic approval.
 
 ## 10. Order Status
 Refund rules only apply to orders the order record shows as

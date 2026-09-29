@@ -18,8 +18,6 @@ CREATE TABLE IF NOT EXISTS orders (
   status TEXT NOT NULL
 );
 
--- Application data: every refund request the system processes.
--- This is what the admin dashboard reads from.
 CREATE TABLE IF NOT EXISTS refund_requests (
   id TEXT PRIMARY KEY,
   order_id TEXT NOT NULL REFERENCES orders(id),

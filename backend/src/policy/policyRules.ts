@@ -65,7 +65,7 @@ function daysSince(dateStr: string, now: Date = new Date()): number {
 /**
  * Runs the order through the deterministic policy rules. This is the
  * FINAL authority on Approved/Denied/Escalated — the AI layer may inform
- * reasoning text, but cannot override this result (Section 7).
+ * reasoning text, but cannot override this result (Section 9).
  */
 export function evaluatePolicy(
   order: Order,

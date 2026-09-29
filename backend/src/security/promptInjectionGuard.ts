@@ -1,20 +1,4 @@
-/**
- * Defense-in-depth against prompt injection in the customer-supplied
- * `reason` field.
- *
- * This is intentionally a simple, auditable pattern screen — not a second
- * LLM call (asking an LLM to judge injection just moves the attack surface
- * rather than closing it). It catches the common shapes of an injection
- * attempt: instructions trying to override the system prompt, requests to
- * reveal hidden instructions, or role-play framing meant to get the model
- * to act outside its bounded task.
- *
- * IMPORTANT: this guard is advisory input to the *policy* layer, not a
- * replacement for it. Per refund_policy.md §5, a flagged request is
- * escalated for human review — the guard never approves or denies on its
- * own, and it runs independently of (and before) the AI call, so a
- * flagged request's raw text is never sent to the LLM as free text.
- */
+
 
 export interface InjectionScreenResult {
   flagged: boolean;
@@ -46,12 +30,7 @@ export function screenForInjection(text: string): InjectionScreenResult {
   };
 }
 
-/**
- * Strips characters that have no legitimate place in a refund reason but
- * are common injection/formatting vectors (control chars, excessive
- * markdown fencing). Applied to every request regardless of whether it
- * was flagged, as a baseline sanitization step.
- */
+
 export function sanitizeReason(text: string): string {
   return text
     .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "") // control chars

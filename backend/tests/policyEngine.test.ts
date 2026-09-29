@@ -80,12 +80,9 @@ describe("evaluatePolicy", () => {
   });
 
   it("does not treat 'wrong size' as a wrong-item defect claim (regression)", () => {
-    // "wrong size" is a preference/fit issue, not a claim that the wrong
-    // item was shipped — it must not trigger the conflicting-claim
-    // escalation just because it contains the word "wrong".
     const order = makeOrder({ finalSale: true, orderDate: "2026-09-20" });
     const result = evaluate(order, "Wrong size, want a refund");
-    expect(result.decision).toBe("denied"); // final sale, not a defect claim
+    expect(result.decision).toBe("denied"); 
   });
 
   it("denies a second refund request for an order that already has an approved refund", () => {
@@ -98,8 +95,7 @@ describe("evaluatePolicy", () => {
   });
 
   it("takes the one-refund-per-order check before the high-value check", () => {
-    // Even a >$500 order should be DENIED (not escalated) if it was already
-    // refunded — the duplicate check is a hard fact checked first.
+
     const order = makeOrder({ price: 900 });
     const result = evaluate(order, "Requesting again", {
       alreadyRefundedThisOrder: true,

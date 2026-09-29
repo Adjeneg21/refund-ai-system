@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import type { Order, PolicyResult } from "../policy/policyRules.js";
 
 /**
- * IMPORTANT — the AI's role is strictly advisory (Policy §7).
+ * IMPORTANT — the AI's role is strictly advisory (Policy §9).
  *
  * The decision (approved / denied / escalated) is already final by the
  * time either function below runs — it comes from the deterministic
@@ -83,6 +83,19 @@ const REPLY_TOOL = {
     },
   },
 };
+
+/**
+ * Used INSTEAD of assessClaim() when the deterministic injection guard has
+ * already flagged the request: the flagged text is never sent to the LLM at
+ * all, so there is nothing for the payload to act on. The result is a fixed,
+ * server-written admin note.
+ */
+export function flaggedAssessment(matchedPatterns: string[]): ClaimAssessment {
+  return {
+    adminNote: `Blocked by security screening (${matchedPatterns.join(", ")}) — the customer's text was not sent to the AI.`,
+    manipulationSuspected: true,
+  };
+}
 
 function fallbackAssessment(): ClaimAssessment {
   return {

@@ -111,7 +111,7 @@ export function listRequestsForCustomer(customerId: string): RefundRequestRecord
 /**
  * True if this order already has an approved refund on record — either the
  * policy engine's own decision, or a decision an admin later approved.
- * Backs the one-refund-per-order rule (Policy §8).
+ * Backs the one-refund-per-order rule (Policy §6).
  */
 export function hasApprovedRefund(orderId: string): boolean {
   const row = db
@@ -128,7 +128,7 @@ export function hasApprovedRefund(orderId: string): boolean {
 /**
  * Counts a customer's approved refunds (policy-approved or admin-approved)
  * within the given number of days. Backs the refund-frequency abuse check
- * (Policy §9).
+ * (Policy §7).
  */
 export function countApprovedRefundsForCustomer(
   customerId: string,
