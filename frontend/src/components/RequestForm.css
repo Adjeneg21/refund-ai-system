@@ -1,0 +1,99 @@
+.request-form {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.request-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 560px) {
+  .request-form__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.request-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.request-form__label {
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+}
+
+.request-form select,
+.request-form textarea {
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+}
+
+.request-form textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.request-form select:focus,
+.request-form textarea:focus {
+  border-color: var(--pine);
+}
+
+.request-form__order-meta {
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  margin-top: calc(var(--space-2) * -1);
+}
+
+.request-form__submit {
+  align-self: flex-start;
+  background: var(--pine);
+  color: var(--surface);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.request-form__submit:hover:not(:disabled) {
+  background: var(--pine-dark);
+}
+
+.request-form__submit:disabled {
+  background: var(--line-strong);
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .request-form {
+    padding: var(--space-4);
+  }
+
+  /* 16px inputs stop iPhones zooming in on focus; 44px is a comfortable tap target */
+  .request-form select,
+  .request-form textarea {
+    font-size: var(--text-base);
+  }
+
+  .request-form select {
+    min-height: 44px;
+  }
+
+  .request-form__submit {
+    align-self: stretch;
+    min-height: 44px;
+  }
+}

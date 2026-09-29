@@ -1,0 +1,41 @@
+:root {
+  /* Color — a register/ledger palette. Status colors are semantic only,
+     never used decoratively outside the DecisionTag component. */
+  --paper: #f2f1ea;
+  --surface: #ffffff;
+  --ink: #1e2420;
+  --ink-soft: #5b6459;
+  --line: #dad9cd;
+  --line-strong: #c4c3b5;
+
+  --pine: #2f4b3c;
+  --pine-dark: #22362b;
+
+  --moss: #3f6b4f; /* approved */
+  --amber: #a9660d; /* escalated */
+  --rust: #8b3a2b; /* denied */
+
+  /* Type */
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    "Times New Roman", serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.25rem;
+
+  /* Layout */
+  --content-max: 880px;
+  --radius-sm: 3px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+}

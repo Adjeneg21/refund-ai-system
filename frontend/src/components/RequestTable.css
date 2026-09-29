@@ -1,0 +1,198 @@
+.request-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.request-table thead th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--ink-soft);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.request-table__num {
+  text-align: right;
+}
+
+.request-table__row {
+  cursor: pointer;
+}
+
+.request-table__row td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.request-table__row:hover {
+  background: var(--surface);
+}
+
+.request-table__timestamp {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.request-table__flag {
+  display: inline-block;
+  margin-left: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--rust);
+  border-bottom: 1px solid var(--rust);
+}
+
+.request-table__detail-row td {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: var(--space-4) var(--space-5);
+}
+
+.request-table__detail {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 68ch;
+}
+
+.request-table__detail-label {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  margin-bottom: var(--space-1);
+}
+
+.request-table__detail p,
+.request-table__detail ul {
+  margin: 0;
+  padding: 0;
+  line-height: 1.55;
+}
+
+.request-table__detail ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.request-table__detail li {
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--line-strong);
+}
+
+.request-table__empty {
+  border: 1px dashed var(--line-strong);
+  padding: var(--space-5);
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.request-table__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.request-table__action {
+  font-size: var(--text-xs);
+  border: 1px solid var(--line-strong);
+  background: var(--paper);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+}
+
+.request-table__action:hover:not(:disabled) {
+  border-color: var(--pine);
+  color: var(--pine);
+}
+
+.request-table__action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.request-table__action--approve:hover:not(:disabled) {
+  border-color: var(--moss);
+  color: var(--moss);
+}
+
+.request-table__action--deny:hover:not(:disabled) {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+.request-table__resolved {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+}
+
+.request-table__na {
+  color: var(--line-strong);
+}
+
+/* The table keeps its normal row/column shape at every width. On a phone
+   it's too wide to fit, so this wrapper scrolls horizontally on its own —
+   the rest of the page never moves sideways. */
+.request-table__scroll {
+  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--line);
+}
+
+.request-table__scroll-hint {
+  display: none;
+  font-size: var(--text-xs);
+  color: var(--ink-soft);
+  margin: 0 0 var(--space-2);
+}
+
+@media (max-width: 720px) {
+  .request-table__scroll-hint {
+    display: block;
+  }
+
+  /* A soft fade on the right edge, hinting there is more to scroll to.
+     Absolutely positioned against the scroll box (which has position:
+     relative), sized with top/bottom insets rather than height: 100%.
+     A sticky + height:100% + margin-top:-100% version was tried first,
+     but that creates a circular height dependency inside an auto-height
+     overflow-x:auto container: the box's height depends on its content,
+     and that content's height depends on the box's (not-yet-known)
+     height. Browsers resolve the loop by collapsing the whole container
+     to its border box. Absolute positioning sidesteps this entirely,
+     since it is sized against the container's box, not the other way
+     around, so it never participates in that height calculation. */
+  .request-table__scroll::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 18px;
+    box-shadow: -18px 0 16px -8px var(--paper);
+    pointer-events: none;
+  }
+
+  .request-table {
+    min-width: 640px; /* keeps every column legible; triggers the scroll */
+  }
+
+  .request-table__detail-row td {
+    /* the reasoning text wraps to a sensible width instead of stretching
+       to match the (now wider) table */
+    white-space: normal;
+  }
+
+  .request-table__detail {
+    max-width: 60vw;
+  }
+
+  .request-table__action {
+    min-height: 44px;
+    padding: var(--space-2) var(--space-4);
+  }
+}

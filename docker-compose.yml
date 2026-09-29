@@ -1,0 +1,56 @@
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: refund-backend
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL:-file:./data/refund.db}
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - LLM_API_KEY=${LLM_API_KEY}
+      - LLM_BASE_URL=${LLM_BASE_URL:-}
+      - LLM_MODEL=${LLM_MODEL:-llama-3.3-70b-versatile}
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-demo-admin}
+      - RATE_LIMIT_PER_MIN=${RATE_LIMIT_PER_MIN:-20}
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: refund-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:4000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    command: npm run dev -- --host
+
+# NOTE: Using SQLite (file-based) by default so the whole stack runs with
+# zero extra infra. To switch to Postgres, uncomment the service below,
+# set DATABASE_URL accordingly, and update backend/src/db/client.ts.
+#
+#  db:
+#    image: postgres:16-alpine
+#    container_name: refund-db
+#    environment:
+#      - POSTGRES_USER=refund
+#      - POSTGRES_PASSWORD=refund
+#      - POSTGRES_DB=refund
+#    ports:
+#      - "5432:5432"
+#    volumes:
+#      - pgdata:/var/lib/postgresql/data
+#
+# volumes:
+#   pgdata:

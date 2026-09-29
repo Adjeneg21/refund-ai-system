@@ -1,0 +1,17 @@
+[
+  { "id": "cust_001", "name": "Amara Okafor", "email": "amara.okafor@example.com", "signupDate": "2023-02-11", "vip": false },
+  { "id": "cust_002", "name": "Liam Chen", "email": "liam.chen@example.com", "signupDate": "2022-11-04", "vip": true },
+  { "id": "cust_003", "name": "Sofia Reyes", "email": "sofia.reyes@example.com", "signupDate": "2024-06-19", "vip": false },
+  { "id": "cust_004", "name": "Kwame Mensah", "email": "kwame.mensah@example.com", "signupDate": "2021-09-30", "vip": true },
+  { "id": "cust_005", "name": "Priya Nair", "email": "priya.nair@example.com", "signupDate": "2023-12-01", "vip": false },
+  { "id": "cust_006", "name": "Daniel Kim", "email": "daniel.kim@example.com", "signupDate": "2024-01-15", "vip": false },
+  { "id": "cust_007", "name": "Fatima Al-Sayed", "email": "fatima.alsayed@example.com", "signupDate": "2022-04-22", "vip": false },
+  { "id": "cust_008", "name": "Marcus Johnson", "email": "marcus.johnson@example.com", "signupDate": "2023-07-08", "vip": false },
+  { "id": "cust_009", "name": "Elena Petrova", "email": "elena.petrova@example.com", "signupDate": "2021-03-17", "vip": true },
+  { "id": "cust_010", "name": "Tomás Silva", "email": "tomas.silva@example.com", "signupDate": "2024-03-29", "vip": false },
+  { "id": "cust_011", "name": "Grace Adeyemi", "email": "grace.adeyemi@example.com", "signupDate": "2022-08-14", "vip": false },
+  { "id": "cust_012", "name": "Noah Williams", "email": "noah.williams@example.com", "signupDate": "2023-05-02", "vip": false },
+  { "id": "cust_013", "name": "Yuki Tanaka", "email": "yuki.tanaka@example.com", "signupDate": "2024-08-09", "vip": false },
+  { "id": "cust_014", "name": "Isabella Rossi", "email": "isabella.rossi@example.com", "signupDate": "2020-12-05", "vip": true },
+  { "id": "cust_015", "name": "Omar Hassan", "email": "omar.hassan@example.com", "signupDate": "2023-10-27", "vip": false }
+]
